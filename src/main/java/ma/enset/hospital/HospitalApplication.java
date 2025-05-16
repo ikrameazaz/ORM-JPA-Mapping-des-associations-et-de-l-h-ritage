@@ -5,6 +5,7 @@ import ma.enset.hospital.repositories.ConsultationRepository;
 import ma.enset.hospital.repositories.MedecinRepository;
 import ma.enset.hospital.repositories.PatientRepository;
 import ma.enset.hospital.repositories.RendezVousRepository;
+import ma.enset.hospital.service.IHospitalService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +25,7 @@ public class HospitalApplication {
 	}
 
 	@Bean
-	CommandLineRunner Start(PatientRepository patientRepository, MedecinRepository medecinRepository, RendezVousRepository rendezVousRepository, ConsultationRepository consultationRepository) {
+	CommandLineRunner Start(IHospitalService hospitalService,PatientRepository patientRepository, MedecinRepository medecinRepository, RendezVousRepository rendezVousRepository) {
 		return args -> {
 			Stream.of("Salma","Soukaina","Zak")
 			        .forEach(name-> {
@@ -32,7 +33,8 @@ public class HospitalApplication {
 						patient.setNom(name);
 						patient.setDateNaissance(new Date());
 						patient.setMalade(false);
-						patientRepository.save(patient);
+						hospitalService.savePatient(patient);
+
 					});
 
 			Stream.of("safaa","Souka","Zaki")
@@ -41,7 +43,7 @@ public class HospitalApplication {
 						medecin.setNom(name);
 						medecin.setEmail(name+"@gmail.com");
 						medecin.setSpecialite(Math.random()>0.5?"Cardio":"Dentiste");
-						medecinRepository.save(medecin);
+						hospitalService.saveMedecin(medecin);
 					});
 			Patient patient = patientRepository.findById(1L).orElse(null);
 			Patient patient1 = patientRepository.findByNom("Soukaina");
@@ -58,10 +60,11 @@ public class HospitalApplication {
 			consultation.setDateConsultation(new Date());
 			consultation.setRendezVous(rendezVous1);
 			consultation.setRapport("Rapport de la consultation");
-			consultationRepository.save(consultation);
-
+			hospitalService.saveConsultation(consultation);
 
 		};
+
 	}
 }
+
 

@@ -1,6 +1,7 @@
 package ma.enset.hospital.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class Medecin {
     private String email;
     private String specialite;
     @OneToMany(mappedBy = "medecin")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Collection<RendezVous> rendezVous;
 
 }
